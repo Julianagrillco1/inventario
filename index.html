@@ -128,8 +128,23 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 </head>
 <body>
 
+<!-- PANTALLA LOGIN -->
+<div id="auth-screen" style="position:fixed;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:40px;text-align:center">
+  <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--paper);letter-spacing:-1.5px;margin-bottom:6px">grillco<span style="color:var(--accent)">.</span>stock</div>
+  <div style="font-size:13px;color:rgba(245,242,235,0.4);margin-bottom:40px;letter-spacing:1px;text-transform:uppercase">Control de inventario</div>
+  <button onclick="signIn()" style="background:var(--paper);color:var(--ink);border:none;padding:15px 34px;border-radius:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:11px;transition:all 0.2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+    <svg width="18" height="18" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+    Iniciar sesión con Microsoft
+  </button>
+  <div id="auth-error" style="margin-top:18px;font-size:12px;color:#e07070;display:none;max-width:320px"></div>
+  <div style="margin-top:22px;font-size:11px;color:rgba(245,242,235,0.3);max-width:320px;line-height:1.6">Solo cuentas de empresa <b>@grillco.cat</b> pueden acceder.</div>
+</div>
+
+<!-- APP (oculta hasta login) -->
+<div id="app-content" style="display:none">
+
 <div class="topbar">
-  <div class="logo">grillco<span>.</span>stock</div>
+  <div class="logo" id="logo-btn" style="cursor:pointer;user-select:none">grillco<span>.</span>stock</div>
   <div class="topbar-right">
     <div class="tu" id="tu"></div>
     <button class="add-top-btn" style="background:var(--ink2)" onclick="exportCSV()">⬇ Exportar Excel</button>
@@ -235,10 +250,121 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 
 <div class="toast" id="toast"></div>
 
+<!-- MODAL ADMIN (oculto) -->
+<div class="overlay" id="admin-overlay" onclick="if(event.target===this)closeAdmin()">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-title">🔐 Panel de administración</div>
+    <div class="modal-sub">Corregir errores, recalcular stock, borrar movimientos. Usar con cuidado.</div>
+
+    <div class="field">
+      <label>Selecciona producto</label>
+      <select id="adm-prod" onchange="admLoadProduct()">
+        <option value="">— Elige un producto —</option>
+      </select>
+    </div>
+
+    <div id="adm-panel" style="display:none">
+      <div style="background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:14px;margin-bottom:14px">
+        <div style="font-size:13px;color:var(--ink2);margin-bottom:4px">Stock actual en sistema:</div>
+        <div id="adm-stock-actual" style="font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--ink)">—</div>
+      </div>
+
+      <!-- Corregir stock -->
+      <div class="field">
+        <label>✏️ Corregir stock al número real (cuenta física)</label>
+        <div style="display:flex;gap:8px">
+          <input type="number" id="adm-stock-nuevo" placeholder="Stock correcto" style="flex:1;background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:9px 11px;font-size:14px;font-family:'Space Mono',monospace;color:var(--ink);outline:none">
+          <button class="btn-save" style="flex:0 0 auto;background:var(--warn)" onclick="admCorregir()">Corregir</button>
+        </div>
+        <span style="font-size:11px;color:var(--ink3);margin-top:4px">Pone el stock al número que indiques y deja registro del ajuste.</span>
+      </div>
+
+      <!-- Recalcular -->
+      <div class="field">
+        <label>🔄 Recalcular stock desde los movimientos</label>
+        <button class="btn-cancel" style="width:100%" onclick="admRecalcular()">Recalcular automáticamente</button>
+        <span style="font-size:11px;color:var(--ink3);margin-top:4px">Suma todas las entradas y resta las salidas para corregir descuadres.</span>
+      </div>
+
+      <!-- Historial con borrado -->
+      <div class="field">
+        <label>🗑 Borrar un movimiento erróneo</label>
+        <div id="adm-movs" style="max-height:200px;overflow-y:auto;background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:8px"></div>
+        <span style="font-size:11px;color:var(--ink3);margin-top:4px">Al borrar un movimiento, el stock se recalcula solo.</span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAdmin()" style="flex:1">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app-content -->
+
 <script>
 const SB_URL = 'https://coamxjqwkkyhysiiptky.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvYW14anF3a2t5aHlzaWlwdGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDc0NDYsImV4cCI6MjA5NjU4MzQ0Nn0.vLUiQeHS8GpU9Y1i7c9TNquaSErFLm_JWhr1I97PFzo';
 const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+// ════════════════════════════════════════════
+// LOGIN MICROSOFT (PKCE) — solo @grillco.cat
+// ════════════════════════════════════════════
+const CLIENT_ID    = '3a7dd2fe-93e3-41d7-b89d-f4cd1c08772e';
+const REDIRECT_URI = window.location.href.split('?')[0].split('#')[0];
+const SCOPES       = 'User.Read';
+const AUTH_URL     = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
+const TOKEN_URL    = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+const DOMINIO_OK   = 'grillco.cat';
+let msUser = null;
+
+function _rnd(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('');}
+async function _sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));}
+function _b64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+
+async function signIn(){
+  const ver=_rnd(32), ch=_b64(await _sha(ver)), st=_rnd(8);
+  sessionStorage.setItem('pv',ver); sessionStorage.setItem('os',st);
+  const p=new URLSearchParams({client_id:CLIENT_ID,response_type:'code',redirect_uri:REDIRECT_URI,scope:SCOPES,state:st,code_challenge:ch,code_challenge_method:'S256',prompt:'select_account'});
+  window.location.href=AUTH_URL+'?'+p;
+}
+
+async function handleRedirect(){
+  const p=new URLSearchParams(window.location.search);
+  const code=p.get('code');
+  if(!code)return false;
+  if(p.get('state')!==sessionStorage.getItem('os')){showAuthErr('Error de seguridad');return false;}
+  const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,code_verifier:sessionStorage.getItem('pv')});
+  try{
+    const r=await fetch(TOKEN_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
+    const d=await r.json();
+    if(!d.access_token){showAuthErr('Error al iniciar sesión');return false;}
+    // Verificar dominio del usuario
+    const ur=await fetch('https://graph.microsoft.com/v1.0/me',{headers:{Authorization:'Bearer '+d.access_token}});
+    const ud=await ur.json();
+    const email=(ud.userPrincipalName||ud.mail||'').toLowerCase();
+    if(!email.endsWith('@'+DOMINIO_OK)){
+      showAuthErr('Acceso denegado. Solo cuentas @'+DOMINIO_OK+'. Tu cuenta: '+email);
+      return false;
+    }
+    msUser=email;
+    sessionStorage.setItem('ms_user',email);
+    window.history.replaceState({},'',REDIRECT_URI);
+    sessionStorage.removeItem('pv');sessionStorage.removeItem('os');
+    return true;
+  }catch(e){showAuthErr('Error: '+e.message);return false;}
+}
+function showAuthErr(m){const el=document.getElementById('auth-error');el.textContent=m;el.style.display='block';}
+
+function mostrarApp(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app-content').style.display='block';
+  if(msUser){
+    const tu=document.getElementById('tu');
+    if(tu)tu.textContent=msUser;
+  }
+}
+
 
 let productos=[], movs={}, expandedId=null, pendingMode=null, filter='all';
 
@@ -515,6 +641,111 @@ async function saveNewProduct(){
   finally{btn.disabled=false;btn.textContent='✓ Añadir producto';setSyncing(false);}
 }
 
+async // ════════════════════════════════════════════
+// PANEL ADMIN
+// ════════════════════════════════════════════
+let admProdId = null;
+
+function openAdmin(){
+  const sel=document.getElementById('adm-prod');
+  sel.innerHTML='<option value="">— Elige un producto —</option>'+
+    [...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre)).map(p=>`<option value="${p.id}">${p.nombre} (${p.stock_actual} ${p.unidad})</option>`).join('');
+  document.getElementById('adm-panel').style.display='none';
+  document.getElementById('admin-overlay').classList.add('show');
+}
+function closeAdmin(){document.getElementById('admin-overlay').classList.remove('show');admProdId=null;}
+
+function admLoadProduct(){
+  const id=document.getElementById('adm-prod').value;
+  admProdId=id;
+  if(!id){document.getElementById('adm-panel').style.display='none';return;}
+  const p=productos.find(x=>x.id===id);
+  document.getElementById('adm-stock-actual').textContent=p.stock_actual+' '+p.unidad;
+  document.getElementById('adm-stock-nuevo').value='';
+  document.getElementById('adm-panel').style.display='block';
+  admLoadMovs(id);
+}
+
+async function admLoadMovs(id){
+  const cont=document.getElementById('adm-movs');
+  cont.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:8px">Cargando...</div>';
+  try{
+    const ms=await sbGet('/rest/v1/movimientos?select=*&producto_id=eq.'+id+'&order=created_at.desc&limit=30');
+    if(!ms.length){cont.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:8px">Sin movimientos</div>';return;}
+    cont.innerHTML=ms.map(m=>{
+      const d=new Date(m.created_at);
+      const fecha=d.toLocaleDateString('es')+' '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--line);font-size:12px">
+        <span style="font-weight:700;color:${m.tipo==='entrada'?'var(--ok)':'var(--danger)'}">${m.tipo==='entrada'?'+':'−'}${m.cantidad}</span>
+        <span style="flex:1;color:var(--ink3)">${m.responsable||'—'} · ${fecha}</span>
+        <button onclick="admBorrarMov('${m.id}')" style="background:var(--danger-bg);color:var(--danger);border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer">Borrar</button>
+      </div>`;
+    }).join('');
+  }catch(e){cont.innerHTML='<div style="font-size:12px;color:var(--danger);padding:8px">Error: '+e.message+'</div>';}
+}
+
+async function admCorregir(){
+  if(!admProdId)return;
+  const nuevo=parseFloat(document.getElementById('adm-stock-nuevo').value);
+  if(isNaN(nuevo)||nuevo<0){showToast('⚠ Pon un número válido');return;}
+  setSyncing(true);
+  try{
+    const r=await sbRpc('corregir_stock',{p_producto_id:admProdId,p_stock_correcto:nuevo,p_responsable:(msUser||'admin')});
+    if(r.error){showToast('⚠ '+r.error);return;}
+    const p=productos.find(x=>x.id===admProdId);
+    if(p)p.stock_actual=nuevo;
+    document.getElementById('adm-stock-actual').textContent=nuevo+' '+(p?p.unidad:'');
+    render();admLoadMovs(admProdId);
+    showToast('✓ Stock corregido a '+nuevo);
+  }catch(e){showToast('⚠ '+e.message);}
+  finally{setSyncing(false);}
+}
+
+async function admRecalcular(){
+  if(!admProdId)return;
+  setSyncing(true);
+  try{
+    const r=await sbRpc('recalcular_stock',{p_producto_id:admProdId});
+    if(r.error){showToast('⚠ '+r.error);return;}
+    const p=productos.find(x=>x.id===admProdId);
+    if(p)p.stock_actual=r.stock_recalculado;
+    document.getElementById('adm-stock-actual').textContent=r.stock_recalculado+' '+(p?p.unidad:'');
+    render();
+    showToast('✓ Stock recalculado: '+r.stock_recalculado);
+  }catch(e){showToast('⚠ '+e.message);}
+  finally{setSyncing(false);}
+}
+
+async function admBorrarMov(movId){
+  if(!confirm('¿Borrar este movimiento? El stock se recalculará automáticamente.'))return;
+  setSyncing(true);
+  try{
+    const r=await sbRpc('borrar_movimiento',{p_movimiento_id:movId});
+    if(r.error){showToast('⚠ '+r.error);return;}
+    const p=productos.find(x=>x.id===admProdId);
+    if(p)p.stock_actual=r.stock_recalculado;
+    document.getElementById('adm-stock-actual').textContent=r.stock_recalculado+' '+(p?p.unidad:'');
+    render();admLoadMovs(admProdId);
+    showToast('✓ Movimiento borrado, stock: '+r.stock_recalculado);
+  }catch(e){showToast('⚠ '+e.message);}
+  finally{setSyncing(false);}
+}
+
+// Activar admin manteniendo pulsado el logo 2 segundos
+let logoTimer=null;
+document.addEventListener('DOMContentLoaded',()=>{
+  const logo=document.getElementById('logo-btn');
+  if(logo){
+    const start=()=>{logoTimer=setTimeout(()=>{openAdmin();},2000);};
+    const stop=()=>{if(logoTimer)clearTimeout(logoTimer);};
+    logo.addEventListener('mousedown',start);
+    logo.addEventListener('mouseup',stop);
+    logo.addEventListener('mouseleave',stop);
+    logo.addEventListener('touchstart',start);
+    logo.addEventListener('touchend',stop);
+  }
+});
+
 async function exportCSV(){
   // Cargar movimientos recientes para el informe
   setSyncing(true);
@@ -593,7 +824,18 @@ async function exportCSV(){
   showToast('✓ Excel descargado con 3 hojas');
 }
 
-init();
+// ── ARRANQUE ──
+(async function(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('code')){
+    const ok=await handleRedirect();
+    if(ok){mostrarApp();await init();}
+    return;
+  }
+  // Si ya hay sesión guardada
+  const saved=sessionStorage.getItem('ms_user');
+  if(saved){msUser=saved;mostrarApp();await init();}
+})();
 </script>
 </body>
 </html>
