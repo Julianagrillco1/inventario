@@ -374,13 +374,13 @@ function buildCard(p){
     </div>`;
   const stockVal=p.stock_actual%1===0?p.stock_actual:parseFloat(p.stock_actual).toFixed(1);
   return `
-  <div class="${cardCls}" id="pc-${p.id}" onclick="toggleCard('${p.id}')">
-    <div class="phead">
+  <div class="${cardCls}" id="pc-${p.id}">
+    <div class="phead" onclick="toggleCard('${p.id}')" style="cursor:pointer">
       <div class="pemoji">${p.emoji||'📦'}</div>
       <div><div class="pname">${p.nombre}</div><div class="pmeta">${p.unidad}${p.proveedor_ref?' · '+p.proveedor_ref:''}</div></div>
       <div><div class="pstock ${sc(p)}">${stockVal}</div><div class="punit">${p.unidad}</div></div>
     </div>
-    <div class="ppanel">${actionHTML}${histHTML}${threshHTML}</div>
+    <div class="ppanel" onclick="event.stopPropagation()">${actionHTML}${histHTML}${threshHTML}</div>
   </div>`;
 }
 
