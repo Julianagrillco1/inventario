@@ -404,7 +404,8 @@ async function confirmMove(id,tipo,e){
   if(btn){btn.disabled=true;btn.textContent='Guardando...';}
   setSyncing(true);
   try{
-    const result=await sbRpc('registrar_movimiento',{p_producto_id:id,p_tipo:tipo,p_cantidad:qty,p_responsable:resp||null,p_area:null,p_notas:null});
+    const tipoDb=tipo==='in'?'entrada':'salida';
+    const result=await sbRpc('registrar_movimiento',{p_producto_id:id,p_tipo:tipoDb,p_cantidad:qty,p_responsable:resp||null,p_area:null,p_notas:null});
     if(result.error){showToast('⚠ '+result.error);if(btn){btn.disabled=false;btn.textContent=tipo==='in'?'✓ Confirmar entrada':'✓ Confirmar salida';}return;}
     prod.stock_actual=result.stock_nuevo;
     if(!movs[id])movs[id]=[];
