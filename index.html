@@ -124,6 +124,7 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .empty-state{text-align:center;padding:48px 20px;color:var(--ink3);font-size:14px;line-height:1.8}
 @media(max-width:480px){.stats{grid-template-columns:1fr 1fr}.tu{display:none}.mbtn-row{grid-template-columns:1fr}.fgrid{grid-template-columns:1fr}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -131,7 +132,7 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
   <div class="logo">grillco<span>.</span>stock</div>
   <div class="topbar-right">
     <div class="tu" id="tu"></div>
-    <button class="add-top-btn" style="background:var(--ink2)" onclick="exportCSV()">⬇ Excel</button>
+    <button class="add-top-btn" style="background:var(--ink2)" onclick="exportCSV()">⬇ Exportar Excel</button>
     <button class="add-top-btn" onclick="openModal()">+ Nuevo producto</button>
     <div class="sync-dot" id="sd"></div>
   </div>
@@ -514,19 +515,82 @@ async function saveNewProduct(){
   finally{btn.disabled=false;btn.textContent='✓ Añadir producto';setSyncing(false);}
 }
 
-function exportCSV(){
-  const headers = ['Nombre','Unidad','Stock actual','Alerta warn','Alerta crítico','Proveedor','Notas'];
-  const rows = productos.map(p => [
-    p.nombre, p.unidad, p.stock_actual, p.alerta_warn, p.alerta_danger,
-    p.proveedor_ref||'', p.notas||''
-  ]);
-  const csv = [headers, ...rows].map(r => r.map(v => '"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'inventario_grillco_'+new Date().toISOString().slice(0,10)+'.csv';
-  a.click();
-  showToast('✓ Excel descargado');
+async function exportCSV(){
+  // Cargar movimientos recientes para el informe
+  setSyncing(true);
+  let allMovs = [];
+  try {
+    const ids = productos.map(p=>p.id);
+    allMovs = await sbGet('/rest/v1/movimientos?select=*,productos(nombre,unidad)&producto_id=in.('+ids.join(',')+')'+'&order=created_at.desc&limit=1000');
+  } catch(_) {}
+  setSyncing(false);
+
+  const wb = XLSX.utils.book_new();
+  const fecha = new Date().toLocaleDateString('es');
+
+  // ── HOJA 1: INVENTARIO ACTUAL ─────────────────────────────
+  const inv = [
+    ['GrillCo · Inventario', '', '', '', '', '', ''],
+    ['Fecha de exportación: ' + fecha, '', '', '', '', '', ''],
+    [],
+    ['Nombre', 'Unidad', 'Stock actual', 'Estado', 'Alerta ⚠', 'Crítico 🚨', 'Proveedor']
+  ];
+  productos.forEach(p => {
+    const s = p.stock_actual;
+    const estado = s <= 0 ? 'Sin stock' : (p.alerta_danger > 0 && s <= p.alerta_danger) ? '🚨 CRÍTICO' : (p.alerta_warn > 0 && s <= p.alerta_warn) ? '⚠ Bajo' : '✅ OK';
+    inv.push([p.nombre, p.unidad, p.stock_actual, estado, p.alerta_warn, p.alerta_danger, p.proveedor_ref||'']);
+  });
+  const ws1 = XLSX.utils.aoa_to_sheet(inv);
+  // Anchos de columna
+  ws1['!cols'] = [{wch:35},{wch:14},{wch:14},{wch:12},{wch:12},{wch:12},{wch:18}];
+  // Rango de tabla
+  ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0}, e:{r:inv.length-1,c:6}});
+  XLSX.utils.book_append_sheet(wb, ws1, 'Inventario actual');
+
+  // ── HOJA 2: ALERTAS ───────────────────────────────────────
+  const alerts = [
+    ['Productos que necesitan atención', '', '', ''],
+    ['Fecha: ' + fecha, '', '', ''],
+    [],
+    ['Nombre', 'Stock actual', 'Unidad', 'Nivel']
+  ];
+  productos.filter(p => {
+    const s = p.stock_actual;
+    return (p.alerta_danger > 0 && s <= p.alerta_danger) || (p.alerta_warn > 0 && s <= p.alerta_warn) || s <= 0;
+  }).forEach(p => {
+    const s = p.stock_actual;
+    const nivel = s <= 0 ? 'Sin stock' : (p.alerta_danger > 0 && s <= p.alerta_danger) ? 'CRÍTICO — comprar ya' : 'Bajo — pedir pronto';
+    alerts.push([p.nombre, p.stock_actual, p.unidad, nivel]);
+  });
+  const ws2 = XLSX.utils.aoa_to_sheet(alerts);
+  ws2['!cols'] = [{wch:35},{wch:14},{wch:14},{wch:24}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Alertas');
+
+  // ── HOJA 3: HISTORIAL MOVIMIENTOS ────────────────────────
+  const hist = [
+    ['Historial de movimientos', '', '', '', '', ''],
+    ['Fecha: ' + fecha, '', '', '', '', ''],
+    [],
+    ['Fecha', 'Hora', 'Producto', 'Tipo', 'Cantidad', 'Responsable']
+  ];
+  allMovs.forEach(m => {
+    const d = new Date(m.created_at);
+    hist.push([
+      d.toLocaleDateString('es'),
+      d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),
+      m.productos?.nombre || '',
+      m.tipo === 'entrada' ? '📥 Entrada' : '📤 Salida',
+      m.cantidad,
+      m.responsable || '—'
+    ]);
+  });
+  const ws3 = XLSX.utils.aoa_to_sheet(hist);
+  ws3['!cols'] = [{wch:12},{wch:8},{wch:35},{wch:12},{wch:12},{wch:16}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'Historial');
+
+  // Descargar
+  XLSX.writeFile(wb, 'GrillCo_Inventario_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  showToast('✓ Excel descargado con 3 hojas');
 }
 
 init();
