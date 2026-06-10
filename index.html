@@ -324,7 +324,7 @@ function _b64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf))).repl
 
 async function signIn(){
   const ver=_rnd(32), ch=_b64(await _sha(ver)), st=_rnd(8);
-  sessionStorage.setItem('pv',ver); sessionStorage.setItem('os',st);
+  localStorage.setItem('pv',ver); localStorage.setItem('os',st);
   const p=new URLSearchParams({client_id:CLIENT_ID,response_type:'code',redirect_uri:REDIRECT_URI,scope:SCOPES,state:st,code_challenge:ch,code_challenge_method:'S256',prompt:'select_account'});
   window.location.href=AUTH_URL+'?'+p;
 }
@@ -332,13 +332,17 @@ async function signIn(){
 async function handleRedirect(){
   const p=new URLSearchParams(window.location.search);
   const code=p.get('code');
+  if(p.get('error')){showAuthErr('Microsoft: '+p.get('error_description'));return false;}
   if(!code)return false;
-  if(p.get('state')!==sessionStorage.getItem('os')){showAuthErr('Error de seguridad');return false;}
-  const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,code_verifier:sessionStorage.getItem('pv')});
+  const savedState=localStorage.getItem('os');
+  if(p.get('state')!==savedState){showAuthErr('Error de seguridad. State esperado: '+savedState+', recibido: '+p.get('state'));return false;}
+  const verifier=localStorage.getItem('pv');
+  if(!verifier){showAuthErr('Error: verifier perdido. Intenta de nuevo.');return false;}
+  const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,code_verifier:verifier});
   try{
     const r=await fetch(TOKEN_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
     const d=await r.json();
-    if(!d.access_token){showAuthErr('Error al iniciar sesión');return false;}
+    if(!d.access_token){showAuthErr('Token error: '+(d.error_description||d.error||JSON.stringify(d)));return false;}
     // Verificar dominio del usuario
     const ur=await fetch('https://graph.microsoft.com/v1.0/me',{headers:{Authorization:'Bearer '+d.access_token}});
     const ud=await ur.json();
@@ -348,9 +352,9 @@ async function handleRedirect(){
       return false;
     }
     msUser=email;
-    sessionStorage.setItem('ms_user',email);
+    localStorage.setItem('ms_user',email);
     window.history.replaceState({},'',REDIRECT_URI);
-    sessionStorage.removeItem('pv');sessionStorage.removeItem('os');
+    localStorage.removeItem('pv');localStorage.removeItem('os');
     return true;
   }catch(e){showAuthErr('Error: '+e.message);return false;}
 }
@@ -833,7 +837,7 @@ async function exportCSV(){
     return;
   }
   // Si ya hay sesión guardada
-  const saved=sessionStorage.getItem('ms_user');
+  const saved=localStorage.getItem('ms_user');
   if(saved){msUser=saved;mostrarApp();await init();}
 })();
 </script>
