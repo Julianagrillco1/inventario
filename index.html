@@ -405,24 +405,18 @@ async function init(){
   }
   setSyncing(false);
   render();
-  // Auto-refresh: solo actualiza datos en silencio, sin tocar la pantalla
+  // Auto-refresh cada 15 segundos
   setInterval(async()=>{
-    if(expandedId||pendingMode) return; // no tocar nada si el usuario está editando
     try{
       const f=await sbGet('/rest/v1/productos?select=*&activo=eq.true&order=nombre.asc');
       productos=f;
       await loadMovs();
-      // Solo actualizar stats y alertas, sin reconstruir las tarjetas
-      const crits=productos.filter(p=>getState(p)==='crit').length;
-      const warns=productos.filter(p=>getState(p)==='warn').length;
-      const zeros=productos.filter(p=>getState(p)==='zero').length;
-      const oks=productos.filter(p=>getState(p)==='ok').length;
-      document.getElementById('s0').textContent=productos.length;
-      document.getElementById('s1').textContent=oks;
-      document.getElementById('s2').textContent=crits+warns;
-      document.getElementById('s3').textContent=zeros;
+      // Si el usuario NO está editando, actualizar todo
+      if(!expandedId && !pendingMode){
+        render();
+      }
     }catch(_){}
-  },30000);
+  },15000);
 }
 
 async function loadMovs(){
