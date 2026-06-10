@@ -376,7 +376,7 @@ let productos=[], movs={}, expandedId=null, pendingMode=null, filter='all';
 const EMOJIS = ['📦','🧴','🧪','🍽️','🔋','🧹','🧽','🖊️','🛍️','🗑️','📫','🌀','🍶','🖨️','🎀','⚠️','👒','🍽️','🪰','🧤','🔧','🪚','📄','🥚','🧼','🫧','🧴','🕸️','✍️','😷','📎','🌾','🧻','🧹','💧','🗞️','🌿','🪨','🚰','📦','🪣','✂️','🛒','🏗️','🌡️','🚪','🥽','⚖️','📋','🍴','🥄','🧪','🖌️','🥊','📫','🔥','🤸','🍕','✨','🏷️','🛍️','📄','🎀','🔑','🪣','💊','🌱','🐛','🪲','🥬','🌰','🫙','🧲','📏','📐','🪛','🔩','🗂️','📊','🖥️','📱','🔌'];
 
 // ── API ───────────────────────────────────────────────────────
-async function sbGet(p){const r=await fetch(SB_URL+p,{headers:H});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbGet(p){const sep=p.includes('?')?'&':'?';const r=await fetch(SB_URL+p+sep+'_t='+Date.now(),{headers:{...H,'Cache-Control':'no-cache'}});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function sbPost(p,b){const r=await fetch(SB_URL+p,{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function sbPatch(p,b){const r=await fetch(SB_URL+p,{method:'PATCH',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function sbRpc(fn,b){const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
