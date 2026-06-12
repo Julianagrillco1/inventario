@@ -17,10 +17,8 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .sync-dot.spin{background:var(--warn);animation:dp 0.7s ease-in-out infinite}
 @keyframes dp{0%,100%{opacity:1}50%{opacity:0.2}}
 .tu{font-size:11px;color:rgba(245,242,235,0.4);font-family:'Space Mono',monospace;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-/* ADD PRODUCT BTN in topbar */
 .add-top-btn{background:var(--accent);color:#fff;border:none;border-radius:var(--rs);padding:7px 13px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.15s;flex-shrink:0}
 .add-top-btn:hover{background:#b04015;transform:translateY(-1px)}
-
 .search-wrap{position:sticky;top:54px;z-index:100;background:var(--paper2);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;gap:7px;align-items:center}
 .si{flex:1;background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:9px 13px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color 0.2s}
 .si:focus{border-color:var(--ink2)}
@@ -89,8 +87,6 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .thbtn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .del-btn{padding:5px 11px;border-radius:var(--rs);border:1px solid rgba(138,46,46,0.3);background:var(--danger-bg);color:var(--danger);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;margin-left:auto}
 .del-btn:hover{background:var(--danger);color:#fff}
-
-/* ── MODAL ADD PRODUCT ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;padding:16px}
 .overlay.show{display:flex}
 .modal{background:var(--paper2);border:1px solid var(--line2);border-radius:var(--r);padding:24px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
@@ -101,7 +97,6 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .field input,.field select{background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:9px 11px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;transition:border-color 0.2s}
 .field input:focus,.field select:focus{border-color:var(--ink2)}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-/* emoji picker */
 .emoji-pick{display:flex;align-items:center;gap:10px}
 .emoji-preview{width:44px;height:44px;border-radius:var(--rs);background:var(--paper3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;cursor:pointer;border:1px solid var(--line2)}
 .emoji-inp{flex:1;background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:9px 11px;font-size:20px;font-family:'DM Sans',sans-serif;color:var(--ink);outline:none;text-align:center;width:60px}
@@ -115,7 +110,6 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 .btn-save{flex:2;padding:11px;border-radius:var(--rs);border:none;background:var(--ink);color:var(--paper);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s}
 .btn-save:hover{background:var(--ink2);transform:translateY(-1px)}
 .btn-save:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);padding:10px 22px;border-radius:30px;font-size:13px;font-weight:500;z-index:999;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;border:1px solid rgba(255,255,255,0.08)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;color:var(--ink3)}
@@ -128,7 +122,6 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 </head>
 <body>
 
-<!-- PANTALLA LOGIN -->
 <div id="auth-screen" style="position:fixed;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:40px;text-align:center">
   <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:var(--paper);letter-spacing:-1.5px;margin-bottom:6px">grillco<span style="color:var(--accent)">.</span>stock</div>
   <div style="font-size:13px;color:rgba(245,242,235,0.4);margin-bottom:40px;letter-spacing:1px;text-transform:uppercase">Control de inventario</div>
@@ -137,10 +130,9 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
     Iniciar sesión con Microsoft
   </button>
   <div id="auth-error" style="margin-top:18px;font-size:12px;color:#e07070;display:none;max-width:320px"></div>
-  <div style="margin-top:22px;font-size:11px;color:rgba(245,242,235,0.3);max-width:320px;line-height:1.6">Solo cuentas de empresa <b>@grillco.cat</b> pueden acceder.</div>
+  <div style="margin-top:22px;font-size:11px;color:rgba(245,242,235,0.3);max-width:320px;line-height:1.6">Solo cuentas autorizadas <b>@grillco.cat</b> pueden acceder.</div>
 </div>
 
-<!-- APP (oculta hasta login) -->
 <div id="app-content" style="display:none">
 
 <div class="topbar">
@@ -172,17 +164,14 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
   <div id="pc"><div class="loading"><div class="spinner"></div><span style="font-size:13px">Cargando inventario...</span></div></div>
 </div>
 
-<!-- MODAL NUEVO PRODUCTO -->
 <div class="overlay" id="overlay" onclick="closeModalOutside(event)">
   <div class="modal" id="modal">
     <div class="modal-title">Nuevo producto</div>
     <div class="modal-sub">Añade un producto al inventario</div>
-
     <div class="field">
       <label>Nombre del producto *</label>
       <input type="text" id="np-nombre" placeholder="Ej: Piedras volcánicas" autocomplete="off">
     </div>
-
     <div class="field">
       <label>Emoji / Icono</label>
       <div class="emoji-pick">
@@ -190,11 +179,8 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
         <input class="emoji-inp" id="np-emoji" type="text" value="📦" maxlength="2" oninput="syncEmoji(this.value)">
         <span style="font-size:12px;color:var(--ink3)">Escribe o elige abajo</span>
       </div>
-      <div class="emoji-grid" id="egrid" style="display:none">
-        <!-- se rellena con JS -->
-      </div>
+      <div class="emoji-grid" id="egrid" style="display:none"></div>
     </div>
-
     <div class="fgrid">
       <div class="field">
         <label>Unidad de medida *</label>
@@ -219,7 +205,6 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
         <input type="text" id="np-unidad-custom" placeholder="Ej: Ladrillo, Bote..." style="display:none">
       </div>
     </div>
-
     <div class="fgrid">
       <div class="field">
         <label>Alerta amarilla ⚠ si queda menos de</label>
@@ -230,17 +215,14 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
         <input type="number" id="np-danger" value="0" min="0">
       </div>
     </div>
-
     <div class="field">
       <label>Proveedor (opcional)</label>
       <input type="text" id="np-proveedor" placeholder="Ej: Amazon, MAKRO...">
     </div>
-
     <div class="field">
       <label>Notas (opcional)</label>
       <input type="text" id="np-notas" placeholder="Cualquier información adicional">
     </div>
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
       <button class="btn-save" id="btn-save" onclick="saveNewProduct()">✓ Añadir producto</button>
@@ -250,26 +232,21 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
 
 <div class="toast" id="toast"></div>
 
-<!-- MODAL ADMIN (oculto) -->
 <div class="overlay" id="admin-overlay" onclick="if(event.target===this)closeAdmin()">
   <div class="modal" style="max-width:520px">
     <div class="modal-title">🔐 Panel de administración</div>
     <div class="modal-sub">Corregir errores, recalcular stock, borrar movimientos. Usar con cuidado.</div>
-
     <div class="field">
       <label>Selecciona producto</label>
       <select id="adm-prod" onchange="admLoadProduct()">
         <option value="">— Elige un producto —</option>
       </select>
     </div>
-
     <div id="adm-panel" style="display:none">
       <div style="background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:14px;margin-bottom:14px">
         <div style="font-size:13px;color:var(--ink2);margin-bottom:4px">Stock actual en sistema:</div>
         <div id="adm-stock-actual" style="font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--ink)">—</div>
       </div>
-
-      <!-- Corregir stock -->
       <div class="field">
         <label>✏️ Corregir stock al número real (cuenta física)</label>
         <div style="display:flex;gap:8px">
@@ -278,38 +255,29 @@ body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;m
         </div>
         <span style="font-size:11px;color:var(--ink3);margin-top:4px">Pone el stock al número que indiques y deja registro del ajuste.</span>
       </div>
-
-      <!-- Recalcular -->
       <div class="field">
         <label>🔄 Recalcular stock desde los movimientos</label>
         <button class="btn-cancel" style="width:100%" onclick="admRecalcular()">Recalcular automáticamente</button>
         <span style="font-size:11px;color:var(--ink3);margin-top:4px">Suma todas las entradas y resta las salidas para corregir descuadres.</span>
       </div>
-
-      <!-- Historial con borrado -->
       <div class="field">
         <label>🗑 Borrar un movimiento erróneo</label>
         <div id="adm-movs" style="max-height:200px;overflow-y:auto;background:var(--paper);border:1px solid var(--line2);border-radius:var(--rs);padding:8px"></div>
         <span style="font-size:11px;color:var(--ink3);margin-top:4px">Al borrar un movimiento, el stock se recalcula solo.</span>
       </div>
     </div>
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeAdmin()" style="flex:1">Cerrar</button>
     </div>
   </div>
 </div>
 
-</div><!-- /app-content -->
+</div>
 
 <script>
 const SB_URL = 'https://coamxjqwkkyhysiiptky.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvYW14anF3a2t5aHlzaWlwdGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwMDc0NDYsImV4cCI6MjA5NjU4MzQ0Nn0.vLUiQeHS8GpU9Y1i7c9TNquaSErFLm_JWhr1I97PFzo';
-const H = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 
-// ════════════════════════════════════════════
-// LOGIN MICROSOFT (PKCE) — solo @grillco.cat
-// ════════════════════════════════════════════
 const CLIENT_ID    = '885da5a4-e5a7-4d14-90d1-2b3e972345c1';
 const REDIRECT_URI = window.location.href.split('?')[0].split('#')[0];
 const SCOPES       = 'User.Read';
@@ -317,6 +285,18 @@ const AUTH_URL     = 'https://login.microsoftonline.com/384af78d-5f14-4ef9-a1a9-
 const TOKEN_URL    = 'https://login.microsoftonline.com/384af78d-5f14-4ef9-a1a9-67f7f34518ca/oauth2/v2.0/token';
 const DOMINIO_OK   = 'grillco.cat';
 let msUser = null;
+
+// ════════════════════════════════════════════
+// HEADERS DINÁMICOS (envían email para RLS Supabase)
+// ════════════════════════════════════════════
+function buildHeaders(){
+  return {
+    'Content-Type':'application/json',
+    'apikey':SB_KEY,
+    'Authorization':'Bearer '+SB_KEY,
+    'x-user-email': msUser || localStorage.getItem('ms_user') || ''
+  };
+}
 
 function _rnd(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return Array.from(a,b=>('0'+b.toString(16)).slice(-2)).join('');}
 async function _sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));}
@@ -335,7 +315,7 @@ async function handleRedirect(){
   if(p.get('error')){showAuthErr('Microsoft: '+p.get('error_description'));return false;}
   if(!code)return false;
   const savedState=localStorage.getItem('os');
-  if(p.get('state')!==savedState){showAuthErr('Error de seguridad. State esperado: '+savedState+', recibido: '+p.get('state'));return false;}
+  if(p.get('state')!==savedState){showAuthErr('Error de seguridad.');return false;}
   const verifier=localStorage.getItem('pv');
   if(!verifier){showAuthErr('Error: verifier perdido. Intenta de nuevo.');return false;}
   const body=new URLSearchParams({client_id:CLIENT_ID,grant_type:'authorization_code',code,redirect_uri:REDIRECT_URI,code_verifier:verifier});
@@ -343,7 +323,6 @@ async function handleRedirect(){
     const r=await fetch(TOKEN_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});
     const d=await r.json();
     if(!d.access_token){showAuthErr('Token error: '+(d.error_description||d.error||JSON.stringify(d)));return false;}
-    // Verificar dominio del usuario
     const ur=await fetch('https://graph.microsoft.com/v1.0/me',{headers:{Authorization:'Bearer '+d.access_token}});
     const ud=await ur.json();
     const email=(ud.userPrincipalName||ud.mail||'').toLowerCase();
@@ -369,17 +348,15 @@ function mostrarApp(){
   }
 }
 
-
 let productos=[], movs={}, expandedId=null, pendingMode=null, filter='all';
 
-// ── EMOJIS SUGERIDOS ──────────────────────────────────────────
 const EMOJIS = ['📦','🧴','🧪','🍽️','🔋','🧹','🧽','🖊️','🛍️','🗑️','📫','🌀','🍶','🖨️','🎀','⚠️','👒','🍽️','🪰','🧤','🔧','🪚','📄','🥚','🧼','🫧','🧴','🕸️','✍️','😷','📎','🌾','🧻','🧹','💧','🗞️','🌿','🪨','🚰','📦','🪣','✂️','🛒','🏗️','🌡️','🚪','🥽','⚖️','📋','🍴','🥄','🧪','🖌️','🥊','📫','🔥','🤸','🍕','✨','🏷️','🛍️','📄','🎀','🔑','🪣','💊','🌱','🐛','🪲','🥬','🌰','🫙','🧲','📏','📐','🪛','🔩','🗂️','📊','🖥️','📱','🔌'];
 
-// ── API ───────────────────────────────────────────────────────
-async function sbGet(p){const r=await fetch(SB_URL+p,{headers:{...H,'Cache-Control':'no-cache','Pragma':'no-cache'}});if(!r.ok)throw new Error(await r.text());return r.json();}
-async function sbPost(p,b){const r=await fetch(SB_URL+p,{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
-async function sbPatch(p,b){const r=await fetch(SB_URL+p,{method:'PATCH',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
-async function sbRpc(fn,b){const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
+// ── API usa buildHeaders() para enviar el email en cada petición
+async function sbGet(p){const r=await fetch(SB_URL+p,{headers:{...buildHeaders(),'Cache-Control':'no-cache','Pragma':'no-cache'}});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbPost(p,b){const r=await fetch(SB_URL+p,{method:'POST',headers:{...buildHeaders(),'Prefer':'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbPatch(p,b){const r=await fetch(SB_URL+p,{method:'PATCH',headers:{...buildHeaders(),'Prefer':'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function sbRpc(fn,b){const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:buildHeaders(),body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
 
 function setSyncing(on){document.getElementById('sd').className='sync-dot'+(on?' spin':'');}
 function showToast(msg,d=2600){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),d);}
@@ -388,33 +365,23 @@ function getState(p){if(p.stock_actual<=0)return'zero';if(p.alerta_danger>0&&p.s
 function sc(p){const s=getState(p);return s==='ok'?'s-ok':s==='warn'?'s-warn':s==='crit'?'s-crit':'s-zero';}
 function fmtDate(ts){if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('es',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});}
 
-// ── INIT ──────────────────────────────────────────────────────
 async function init(){
   setSyncing(true);
   try{
     productos=await sbGet('/rest/v1/productos?select=*&activo=eq.true&order=nombre.asc');
     await loadMovs();
   }catch(e){
-    document.getElementById('pc').innerHTML=`<div class="empty-state">❌ <b>No se pudo conectar con Supabase</b><br><br>
-      Pasos para solucionar:<br>
-      1. Ve a tu proyecto Supabase → SQL Editor<br>
-      2. Pega el contenido de <b>supabase_setup.sql</b><br>
-      3. Pulsa RUN y recarga esta página<br><br>
-      <small style="color:var(--ink3)">${e.message}</small></div>`;
+    document.getElementById('pc').innerHTML='<div class="empty-state">❌ <b>No se pudo conectar con Supabase</b><br><br><small style="color:var(--ink3)">'+e.message+'</small></div>';
     setSyncing(false);return;
   }
   setSyncing(false);
   render();
-  // Auto-refresh cada 15 segundos
   setInterval(async()=>{
     try{
       const f=await sbGet('/rest/v1/productos?select=*&activo=eq.true&order=nombre.asc');
       productos=f;
       await loadMovs();
-      // Si el usuario NO está editando, actualizar todo
-      if(!expandedId && !pendingMode){
-        render();
-      }
+      if(!expandedId && !pendingMode){render();}
     }catch(_){}
   },15000);
 }
@@ -427,7 +394,6 @@ async function loadMovs(){
   all.forEach(m=>{if(!movs[m.producto_id])movs[m.producto_id]=[];if(movs[m.producto_id].length<6)movs[m.producto_id].push(m);});
 }
 
-// ── RENDER ────────────────────────────────────────────────────
 function render(){
   const q=document.getElementById('si').value.trim().toLowerCase();
   let list=productos.filter(p=>{
@@ -456,10 +422,7 @@ function render(){
     {label:'✅ Con stock',color:'var(--ok)',items:list.filter(p=>getState(p)==='ok')},
     {label:'○ Sin stock',color:'var(--ink3)',items:list.filter(p=>getState(p)==='zero')},
   ].filter(g=>g.items.length);
-  document.getElementById('pc').innerHTML=groups.map(g=>`
-    <div class="slabel" style="color:${g.color}">${g.label} (${g.items.length})</div>
-    <div class="pgrid">${g.items.map(p=>buildCard(p)).join('')}</div>
-  `).join('');
+  document.getElementById('pc').innerHTML=groups.map(g=>'<div class="slabel" style="color:'+g.color+'">'+g.label+' ('+g.items.length+')</div><div class="pgrid">'+g.items.map(p=>buildCard(p)).join('')+'</div>').join('');
 }
 
 function buildCard(p){
@@ -467,64 +430,14 @@ function buildCard(p){
   const modeIn=isOpen&&pendingMode==='in',modeOut=isOpen&&pendingMode==='out';
   const cardCls='pcard'+(isOpen?' open':'')+(state==='crit'?' crit':state==='warn'?' lwarn':'');
   const pm=movs[p.id]||[];
-  const alertHTML=state==='warn'?`<div class="arow arow-w">⚠ Stock bajo (${p.stock_actual} ${p.unidad}) — considera pedir</div>`:state==='crit'?`<div class="arow arow-d">🚨 Stock crítico (${p.stock_actual} ${p.unidad}) — pedir URGENTE</div>`:'';
-  const actionHTML=(modeIn||modeOut)?`
-    <div class="ptitle">${modeIn?'📥 REGISTRAR ENTRADA':'📤 REGISTRAR SALIDA'}</div>
-    ${alertHTML}
-    <div class="qrow">
-      <div class="qlbl">Cantidad (${p.unidad}):</div>
-      <button class="qbtn" onclick="adjQ('${p.id}',-1,event)">−</button>
-      <input class="qinp" id="qi-${p.id}" type="number" value="1" min="1" step="1">
-      <button class="qbtn" onclick="adjQ('${p.id}',1,event)">+</button>
-    </div>
-    <div class="qrow">
-      <div class="qlbl">Responsable:</div>
-      <select class="rsel" id="rp-${p.id}">
-        <option value="">— Sin especificar —</option>
-        <option>Begoña</option><option>Damia</option><option>Marina</option>
-        <option>Mohammed</option><option>Napoleon</option><option>Rodrigo</option>
-        <option>Zakarias</option>
-      </select>
-    </div>
-    <button class="cfbtn ${modeIn?'cf-in':'cf-out'}" id="cfb-${p.id}" onclick="confirmMove('${p.id}','${modeIn?'in':'out'}',event)">
-      ${modeIn?'✓ Confirmar entrada':'✓ Confirmar salida'}
-    </button>`:`
-    <div class="mbtn-row">
-      <button class="mbtn mbtn-in"  onclick="setMode('${p.id}','in',event)">📥 Entrada</button>
-      <button class="mbtn mbtn-out" onclick="setMode('${p.id}','out',event)">📤 Salida</button>
-    </div>${alertHTML}`;
-  const histHTML=pm.length?`
-    <div class="hlist">
-      <div class="ptitle" style="margin-top:4px">Últimos movimientos</div>
-      ${pm.map(m=>`
-        <div class="hitem">
-          <div class="hdir ${m.tipo==='entrada'?'hdir-in':'hdir-out'}">${m.tipo==='entrada'?'+':'−'}</div>
-          <div class="hqty ${m.tipo==='entrada'?'hqty-in':'hqty-out'}">${m.tipo==='entrada'?'+':'−'}${m.cantidad}</div>
-          <div class="hmeta">${m.responsable||'—'}${m.area?' · '+m.area:''}</div>
-          <div class="hdate">${fmtDate(m.created_at)}</div>
-        </div>`).join('')}
-    </div>`:'';
-  const threshHTML=`
-    <div class="thresh">
-      <span class="thlbl">Alerta ⚠:</span>
-      <input class="thinp" id="tw-${p.id}" type="number" value="${p.alerta_warn}" min="0">
-      <span class="thlbl">Crítico 🚨:</span>
-      <input class="thinp" id="td-${p.id}" type="number" value="${p.alerta_danger}" min="0">
-      <button class="thbtn" onclick="saveThresh('${p.id}',event)">Guardar</button>
-    </div>`;
+  const alertHTML=state==='warn'?'<div class="arow arow-w">⚠ Stock bajo ('+p.stock_actual+' '+p.unidad+') — considera pedir</div>':state==='crit'?'<div class="arow arow-d">🚨 Stock crítico ('+p.stock_actual+' '+p.unidad+') — pedir URGENTE</div>':'';
+  const actionHTML=(modeIn||modeOut)?'<div class="ptitle">'+(modeIn?'📥 REGISTRAR ENTRADA':'📤 REGISTRAR SALIDA')+'</div>'+alertHTML+'<div class="qrow"><div class="qlbl">Cantidad ('+p.unidad+'):</div><button class="qbtn" onclick="adjQ(\''+p.id+'\',-1,event)">−</button><input class="qinp" id="qi-'+p.id+'" type="number" value="1" min="1" step="1"><button class="qbtn" onclick="adjQ(\''+p.id+'\',1,event)">+</button></div><div class="qrow"><div class="qlbl">Responsable:</div><select class="rsel" id="rp-'+p.id+'"><option value="">— Sin especificar —</option><option>Begoña</option><option>Damia</option><option>Marina</option><option>Mohammed</option><option>Napoleon</option><option>Rodrigo</option><option>Zakarias</option></select></div><button class="cfbtn '+(modeIn?'cf-in':'cf-out')+'" id="cfb-'+p.id+'" onclick="confirmMove(\''+p.id+'\',\''+(modeIn?'in':'out')+'\',event)">'+(modeIn?'✓ Confirmar entrada':'✓ Confirmar salida')+'</button>':'<div class="mbtn-row"><button class="mbtn mbtn-in" onclick="setMode(\''+p.id+'\',\'in\',event)">📥 Entrada</button><button class="mbtn mbtn-out" onclick="setMode(\''+p.id+'\',\'out\',event)">📤 Salida</button></div>'+alertHTML;
+  const histHTML=pm.length?'<div class="hlist"><div class="ptitle" style="margin-top:4px">Últimos movimientos</div>'+pm.map(m=>'<div class="hitem"><div class="hdir '+(m.tipo==='entrada'?'hdir-in':'hdir-out')+'">'+(m.tipo==='entrada'?'+':'−')+'</div><div class="hqty '+(m.tipo==='entrada'?'hqty-in':'hqty-out')+'">'+(m.tipo==='entrada'?'+':'−')+m.cantidad+'</div><div class="hmeta">'+(m.responsable||'—')+(m.area?' · '+m.area:'')+'</div><div class="hdate">'+fmtDate(m.created_at)+'</div></div>').join('')+'</div>':'';
+  const threshHTML='<div class="thresh"><span class="thlbl">Alerta ⚠:</span><input class="thinp" id="tw-'+p.id+'" type="number" value="'+p.alerta_warn+'" min="0"><span class="thlbl">Crítico 🚨:</span><input class="thinp" id="td-'+p.id+'" type="number" value="'+p.alerta_danger+'" min="0"><button class="thbtn" onclick="saveThresh(\''+p.id+'\',event)">Guardar</button></div>';
   const stockVal=p.stock_actual%1===0?p.stock_actual:parseFloat(p.stock_actual).toFixed(1);
-  return `
-  <div class="${cardCls}" id="pc-${p.id}">
-    <div class="phead">
-      <div class="pemoji" onclick="toggleCard('${p.id}')">${p.emoji||'📦'}</div>
-      <div style="flex:1;min-width:0;cursor:pointer" onclick="toggleCard('${p.id}')"><div class="pname">${p.nombre}</div><div class="pmeta">${p.unidad}${p.proveedor_ref?' · '+p.proveedor_ref:''}</div></div>
-      <div style="cursor:pointer" onclick="toggleCard('${p.id}')"><div class="pstock ${sc(p)}">${stockVal}</div><div class="punit">${p.unidad}</div></div>
-    </div>
-    <div class="ppanel" onclick="event.stopPropagation()">${actionHTML}${histHTML}${threshHTML}</div>
-  </div>`;
+  return '<div class="'+cardCls+'" id="pc-'+p.id+'"><div class="phead"><div class="pemoji" onclick="toggleCard(\''+p.id+'\')">'+(p.emoji||'📦')+'</div><div style="flex:1;min-width:0;cursor:pointer" onclick="toggleCard(\''+p.id+'\')"><div class="pname">'+p.nombre+'</div><div class="pmeta">'+p.unidad+(p.proveedor_ref?' · '+p.proveedor_ref:'')+'</div></div><div style="cursor:pointer" onclick="toggleCard(\''+p.id+'\')"><div class="pstock '+sc(p)+'">'+stockVal+'</div><div class="punit">'+p.unidad+'</div></div></div><div class="ppanel" onclick="event.stopPropagation()">'+actionHTML+histHTML+threshHTML+'</div></div>';
 }
 
-// ── INTERACCIÓN CARDS ─────────────────────────────────────────
 function toggleCard(id){
   if(expandedId===id){expandedId=null;pendingMode=null;}else{expandedId=id;pendingMode=null;}
   render();
@@ -540,7 +453,7 @@ async function confirmMove(id,tipo,e){
   const resp=document.getElementById('rp-'+id)?.value||'';
   if(qty<=0){showToast('⚠ Cantidad inválida');return;}
   const prod=productos.find(p=>p.id===id);
-  if(tipo==='out'&&qty>prod.stock_actual){showToast(`⚠ Stock insuficiente. Hay ${prod.stock_actual} ${prod.unidad}`);return;}
+  if(tipo==='out'&&qty>prod.stock_actual){showToast('⚠ Stock insuficiente. Hay '+prod.stock_actual+' '+prod.unidad);return;}
   if(btn){btn.disabled=true;btn.textContent='Guardando...';}
   setSyncing(true);
   try{
@@ -553,7 +466,7 @@ async function confirmMove(id,tipo,e){
     if(movs[id].length>6)movs[id].pop();
     expandedId=null;pendingMode=null;
     render();
-    showToast(tipo==='in'?`✓ +${qty} ${prod.unidad} → stock: ${result.stock_nuevo}`:`✓ −${qty} ${prod.unidad} → stock: ${result.stock_nuevo}`);
+    showToast(tipo==='in'?'✓ +'+qty+' '+prod.unidad+' → stock: '+result.stock_nuevo:'✓ −'+qty+' '+prod.unidad+' → stock: '+result.stock_nuevo);
   }catch(err){showToast('⚠ '+err.message);if(btn){btn.disabled=false;btn.textContent=tipo==='in'?'✓ Confirmar entrada':'✓ Confirmar salida';}}
   finally{setSyncing(false);}
 }
@@ -572,19 +485,6 @@ async function saveThresh(id,e){
   finally{setSyncing(false);}
 }
 
-async function deleteProduct(id,nombre,e){
-  e.stopPropagation();
-  if(!confirm(`¿Eliminar "${nombre}" del inventario?\nEsto no borra el historial de movimientos.`))return;
-  setSyncing(true);
-  try{
-    await sbPatch('/rest/v1/productos?id=eq.'+id,{activo:false});
-    productos=productos.filter(p=>p.id!==id);
-    expandedId=null;render();showToast(`✓ "${nombre}" eliminado`);
-  }catch(err){showToast('⚠ '+err.message);}
-  finally{setSyncing(false);}
-}
-
-// ── MODAL NUEVO PRODUCTO ──────────────────────────────────────
 function openModal(){
   document.getElementById('np-nombre').value='';
   document.getElementById('np-emoji').value='📦';
@@ -603,7 +503,7 @@ function closeModalOutside(e){if(e.target===document.getElementById('overlay'))c
 
 function buildEmojiGrid(){
   const g=document.getElementById('egrid');
-  g.innerHTML=EMOJIS.map(em=>`<div class="eq" onclick="pickEmoji('${em}')">${em}</div>`).join('');
+  g.innerHTML=EMOJIS.map(em=>'<div class="eq" onclick="pickEmoji(\''+em+'\')">'+em+'</div>').join('');
 }
 function toggleEmojiGrid(){
   const g=document.getElementById('egrid');
@@ -618,7 +518,6 @@ function syncEmoji(v){
   if(v)document.getElementById('ep').textContent=v;
 }
 
-// selector unidad personalizada
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('np-unidad').addEventListener('change',function(){
     const cu=document.getElementById('np-unidad-custom');
@@ -638,7 +537,6 @@ async function saveNewProduct(){
   const danger=parseFloat(document.getElementById('np-danger').value)||0;
   const proveedor=document.getElementById('np-proveedor').value.trim()||null;
   const notas=document.getElementById('np-notas').value.trim()||null;
-
   const btn=document.getElementById('btn-save');
   btn.disabled=true;btn.textContent='Guardando...';
   setSyncing(true);
@@ -649,20 +547,17 @@ async function saveNewProduct(){
       productos.sort((a,b)=>a.nombre.localeCompare(b.nombre));
     }
     closeModal();render();
-    showToast(`✓ "${nombre}" añadido al inventario`);
+    showToast('✓ "'+nombre+'" añadido al inventario');
   }catch(err){showToast('⚠ Error: '+err.message);}
   finally{btn.disabled=false;btn.textContent='✓ Añadir producto';setSyncing(false);}
 }
 
-// ════════════════════════════════════════════
-// PANEL ADMIN
-// ════════════════════════════════════════════
 let admProdId = null;
 
 function openAdmin(){
   const sel=document.getElementById('adm-prod');
   sel.innerHTML='<option value="">— Elige un producto —</option>'+
-    [...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre)).map(p=>`<option value="${p.id}">${p.nombre} (${p.stock_actual} ${p.unidad})</option>`).join('');
+    [...productos].sort((a,b)=>a.nombre.localeCompare(b.nombre)).map(p=>'<option value="'+p.id+'">'+p.nombre+' ('+p.stock_actual+' '+p.unidad+')</option>').join('');
   document.getElementById('adm-panel').style.display='none';
   document.getElementById('admin-overlay').classList.add('show');
 }
@@ -688,11 +583,7 @@ async function admLoadMovs(id){
     cont.innerHTML=ms.map(m=>{
       const d=new Date(m.created_at);
       const fecha=d.toLocaleDateString('es')+' '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
-      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--line);font-size:12px">
-        <span style="font-weight:700;color:${m.tipo==='entrada'?'var(--ok)':'var(--danger)'}">${m.tipo==='entrada'?'+':'−'}${m.cantidad}</span>
-        <span style="flex:1;color:var(--ink3)">${m.responsable||'—'} · ${fecha}</span>
-        <button onclick="admBorrarMov('${m.id}')" style="background:var(--danger-bg);color:var(--danger);border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer">Borrar</button>
-      </div>`;
+      return '<div style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--line);font-size:12px"><span style="font-weight:700;color:'+(m.tipo==='entrada'?'var(--ok)':'var(--danger)')+'">'+(m.tipo==='entrada'?'+':'−')+m.cantidad+'</span><span style="flex:1;color:var(--ink3)">'+(m.responsable||'—')+' · '+fecha+'</span><button onclick="admBorrarMov(\''+m.id+'\')" style="background:var(--danger-bg);color:var(--danger);border:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer">Borrar</button></div>';
     }).join('');
   }catch(e){cont.innerHTML='<div style="font-size:12px;color:var(--danger);padding:8px">Error: '+e.message+'</div>';}
 }
@@ -744,7 +635,6 @@ async function admBorrarMov(movId){
   finally{setSyncing(false);}
 }
 
-// Activar admin manteniendo pulsado el logo 2 segundos
 let logoTimer=null;
 document.addEventListener('DOMContentLoaded',()=>{
   const logo=document.getElementById('logo-btn');
@@ -760,7 +650,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 async function exportCSV(){
-  // Cargar movimientos recientes para el informe
   setSyncing(true);
   let allMovs = [];
   try {
@@ -768,36 +657,19 @@ async function exportCSV(){
     allMovs = await sbGet('/rest/v1/movimientos?select=*,productos(nombre,unidad)&producto_id=in.('+ids.join(',')+')'+'&order=created_at.desc&limit=1000');
   } catch(_) {}
   setSyncing(false);
-
   const wb = XLSX.utils.book_new();
   const fecha = new Date().toLocaleDateString('es');
-
-  // ── HOJA 1: INVENTARIO ACTUAL ─────────────────────────────
-  const inv = [
-    ['GrillCo · Inventario', '', '', '', '', '', ''],
-    ['Fecha de exportación: ' + fecha, '', '', '', '', '', ''],
-    [],
-    ['Nombre', 'Unidad', 'Stock actual', 'Estado', 'Alerta ⚠', 'Crítico 🚨', 'Proveedor']
-  ];
+  const inv = [['GrillCo · Inventario','','','','','',''],['Fecha de exportación: ' + fecha,'','','','','',''],[],['Nombre','Unidad','Stock actual','Estado','Alerta ⚠','Crítico 🚨','Proveedor']];
   productos.forEach(p => {
     const s = p.stock_actual;
     const estado = s <= 0 ? 'Sin stock' : (p.alerta_danger > 0 && s <= p.alerta_danger) ? '🚨 CRÍTICO' : (p.alerta_warn > 0 && s <= p.alerta_warn) ? '⚠ Bajo' : '✅ OK';
     inv.push([p.nombre, p.unidad, p.stock_actual, estado, p.alerta_warn, p.alerta_danger, p.proveedor_ref||'']);
   });
   const ws1 = XLSX.utils.aoa_to_sheet(inv);
-  // Anchos de columna
   ws1['!cols'] = [{wch:35},{wch:14},{wch:14},{wch:12},{wch:12},{wch:12},{wch:18}];
-  // Rango de tabla
   ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0}, e:{r:inv.length-1,c:6}});
   XLSX.utils.book_append_sheet(wb, ws1, 'Inventario actual');
-
-  // ── HOJA 2: ALERTAS ───────────────────────────────────────
-  const alerts = [
-    ['Productos que necesitan atención', '', '', ''],
-    ['Fecha: ' + fecha, '', '', ''],
-    [],
-    ['Nombre', 'Stock actual', 'Unidad', 'Nivel']
-  ];
+  const alerts = [['Productos que necesitan atención','','',''],['Fecha: ' + fecha,'','',''],[],['Nombre','Stock actual','Unidad','Nivel']];
   productos.filter(p => {
     const s = p.stock_actual;
     return (p.alerta_danger > 0 && s <= p.alerta_danger) || (p.alerta_warn > 0 && s <= p.alerta_warn) || s <= 0;
@@ -809,35 +681,18 @@ async function exportCSV(){
   const ws2 = XLSX.utils.aoa_to_sheet(alerts);
   ws2['!cols'] = [{wch:35},{wch:14},{wch:14},{wch:24}];
   XLSX.utils.book_append_sheet(wb, ws2, 'Alertas');
-
-  // ── HOJA 3: HISTORIAL MOVIMIENTOS ────────────────────────
-  const hist = [
-    ['Historial de movimientos', '', '', '', '', ''],
-    ['Fecha: ' + fecha, '', '', '', '', ''],
-    [],
-    ['Fecha', 'Hora', 'Producto', 'Tipo', 'Cantidad', 'Responsable']
-  ];
+  const hist = [['Historial de movimientos','','','','',''],['Fecha: ' + fecha,'','','','',''],[],['Fecha','Hora','Producto','Tipo','Cantidad','Responsable']];
   allMovs.forEach(m => {
     const d = new Date(m.created_at);
-    hist.push([
-      d.toLocaleDateString('es'),
-      d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}),
-      m.productos?.nombre || '',
-      m.tipo === 'entrada' ? '📥 Entrada' : '📤 Salida',
-      m.cantidad,
-      m.responsable || '—'
-    ]);
+    hist.push([d.toLocaleDateString('es'), d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}), m.productos?.nombre || '', m.tipo === 'entrada' ? '📥 Entrada' : '📤 Salida', m.cantidad, m.responsable || '—']);
   });
   const ws3 = XLSX.utils.aoa_to_sheet(hist);
   ws3['!cols'] = [{wch:12},{wch:8},{wch:35},{wch:12},{wch:12},{wch:16}];
   XLSX.utils.book_append_sheet(wb, ws3, 'Historial');
-
-  // Descargar
   XLSX.writeFile(wb, 'GrillCo_Inventario_'+new Date().toISOString().slice(0,10)+'.xlsx');
   showToast('✓ Excel descargado con 3 hojas');
 }
 
-// ── ARRANQUE ──
 (async function(){
   const params=new URLSearchParams(window.location.search);
   if(params.get('code')){
@@ -845,7 +700,6 @@ async function exportCSV(){
     if(ok){mostrarApp();await init();}
     return;
   }
-  // Si ya hay sesión guardada
   const saved=localStorage.getItem('ms_user');
   if(saved){msUser=saved;mostrarApp();await init();}
 })();
